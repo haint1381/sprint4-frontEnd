@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ShoppingCartService} from '../../service/shopping-cart.service';
 import {Goods} from '../../model/goods.class';
 import {GoodsCart} from '../../model/goods-cart';
+import {TokenStorageService} from '../../../page-common/service/token-storage/token-storage.service';
 
 @Component({
   selector: 'app-list-cart',
@@ -10,16 +11,53 @@ import {GoodsCart} from '../../model/goods-cart';
 })
 export class BillGoodsComponent implements OnInit {
   public listGoodsCart: GoodsCart[] = [];
-  constructor(private shoppingCartService: ShoppingCartService) { }
+  public totalMoney = 0;
+  public goodsCart: GoodsCart;
+
+  constructor(private shoppingCartService: ShoppingCartService,
+              private tokenStorageService: TokenStorageService) {
+  }
 
   ngOnInit(): void {
-    this.shoppingCartService.getAllGoodsCart('tienhai').subscribe(next => {
-      this.listGoodsCart = next;
-    });
+    if (this.tokenStorageService.getUser() != null) {
+      this.shoppingCartService.getAllGoodsCart(this.tokenStorageService.getUser().username).subscribe(next => {
+        this.listGoodsCart = next;
+      });
+    }
   }
+
+
   formatCash(str): void {
     return str.split('').reverse().reduce((prev, next, index) => {
       return ((index % 3) ? next : (next + '.')) + prev;
     });
+  }
+
+  setQuantityCart(value: string, idGoodsCart: number): void {
+    for (const element of this.listGoodsCart) {
+      if (idGoodsCart == element.idGoodsCart) {
+        element.quantityCart = Number(value);
+        this.shoppingCartService.findBy(element.idGoods).subscribe(data => {
+          this.goodsCart = data;
+        }, () => {
+        }, () => {
+          this.goodsCart.quantityCart = Number(value);
+          this.shoppingCartService.updateCart(this.goodsCart, String(this.goodsCart.idGoodsCart)).subscribe(data => {
+          });
+        });
+      }
+    }
+  }
+
+  deleteGoodsCart(idGoodsCart: number): void {
+    this.shoppingCartService.resetCart(idGoodsCart).subscribe(next => {
+      this.ngOnInit();
+    });
+  }
+
+  checkout(): void {
+    for (const element of this.listGoodsCart) {
+      this.totalMoney += (element.quantityCart * element.price) - ((element.quantityCart * element.price) * element.saleOff / 100);
+    }
   }
 }

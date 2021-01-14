@@ -8,6 +8,5 @@ export class GoodsCart {
   public  saleOff: number;
   public  priceForSaleOff: number;
   public  image: string;
-  public  totalMoney: number;
   public  cart: number;
 }

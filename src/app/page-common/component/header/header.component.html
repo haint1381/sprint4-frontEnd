@@ -28,9 +28,17 @@
                 <li><a href="#">Tiếng anh</a></li>
               </ul>
             </div>
-            <div class="header__top__right__auth">
-              <a role="button" (click)="openDialogLogin()"><i class="fa fa-user"></i> Đăng nhập</a>
+            <div class="header__top__right__auth" *ngIf="isLoggedIn == false; else block">
+              <a role="button" data-toggle="modal" data-target="#loginModal"><i class="fa fa-user"></i> Đăng nhập</a>
             </div>
+            <ng-template #block>
+              <div class="header__top__right__auth">
+                <i class="far fa-user-circle"></i> <span class="text-dark font-weight-bold">&nbsp;{{user.fullName}}</span>
+              </div>
+              <div class="header__top__right__auth">
+                <a role="button" (click)="logout()">&nbsp;&nbsp;&nbsp;<i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+              </div>
+            </ng-template>
           </div>
         </div>
       </div>
@@ -75,3 +83,60 @@
   </div>
 </header>
 <!-- Header Section End -->
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header border-bottom-0">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-title text-center">
+          <h4 class="font-weight-bold">Đăng nhập</h4>
+        </div>
+        <div class="d-flex flex-column text-center">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
+            <div class="form-group">
+             <input type="text" class="form-control" formControlName="username"
+                                                 placeholder="Nhập tên tài khoản của bạn...">
+            </div>
+            <div class="form-group">
+           <input [type]="inputType" class="form-control" formControlName="password"
+                                                    placeholder="Mã mật khẩu...">
+            </div>
+            <div class="form-group d-flex justify-content-start">
+              <input type="checkbox"  class="mt-1" (click)=displayPassword()>&nbsp;&nbsp;Hiển thị mật khẩu
+            </div>
+            <div class="form-group" *ngIf="errorMessage != ''">
+              <p role="alert" class="alert alert-danger">{{errorMessage}}</p>
+            </div>
+            <button type="submit" class="site-btn form-control" style="background-color: #7fad39;">Đăng nhập</button>
+          </form>
+
+          <div class="text-center text-muted delimiter">Hoặc đăng nhập qua</div>
+          <div class="d-flex justify-content-center social-buttons">
+            <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip" data-placement="top"
+                    title="Twitter">
+              <i class="fab fa-twitter"></i>
+            </button>
+            <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip" data-placement="top"
+                    title="Facebook">
+              <i class="fab fa-facebook"></i>
+            </button>
+            <button type="button" class="btn btn-secondary btn-round" data-toggle="tooltip" data-placement="top"
+                    title="Linkedin">
+              <i class="fab fa-linkedin"></i>
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <div class="signup-section">Bạn chưa là thành viên? <a href="#" class="text-info"> Đăng ký</a>.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

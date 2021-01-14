@@ -48,4 +48,10 @@ export class ShoppingCartService {
     params = params.append('idGoodsCart', idGoodsCart);
     return this.http.delete<any>(this.API_CART + 'deleteAll', {params});
   }
+
+  findByUser(username): Observable<any> {
+    let params = new HttpParams();
+    params = params.append('username', username);
+    return this.http.get(this.API + 'find-by', {params});
+  }
 }

@@ -7,13 +7,13 @@ import { FooterComponent } from './component/footer/footer.component';
 import { BodyPageComponent } from './component/body-page/body-page.component';
 import { ContactComponent } from './component/contact/contact.component';
 import { BlogComponent } from './component/blog/blog.component';
-import { LoginComponent } from './component/login/login.component';
 import {MatDialogModule} from '@angular/material/dialog';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 
 @NgModule({
-  declarations: [HeaderComponent, FooterComponent, BodyPageComponent, ContactComponent, BlogComponent, LoginComponent],
+  declarations: [HeaderComponent, FooterComponent, BodyPageComponent, ContactComponent, BlogComponent],
   exports: [
     HeaderComponent,
     FooterComponent,
@@ -23,6 +23,7 @@ import {MatDialogModule} from '@angular/material/dialog';
     CommonModule,
     RouterModule.forChild(CommonRoute),
     MatDialogModule,
+    ReactiveFormsModule,
   ]
 })
 export class PageCommonModule { }

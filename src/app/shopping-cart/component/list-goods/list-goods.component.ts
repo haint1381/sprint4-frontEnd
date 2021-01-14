@@ -3,6 +3,7 @@ import {ShoppingCartService} from '../../service/shopping-cart.service';
 import {Goods} from '../../model/goods.class';
 import {MatDialog} from '@angular/material/dialog';
 import {GoodsCart} from '../../model/goods-cart';
+import {TokenStorageService} from '../../../page-common/service/token-storage/token-storage.service';
 
 @Component({
   selector: 'app-list-goods',
@@ -15,20 +16,23 @@ export class ListGoodsComponent implements OnInit {
   public goodsCart: GoodsCart;
 
   constructor(private shoppingCartService: ShoppingCartService,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private tokenStorageService: TokenStorageService) {
   }
 
   ngOnInit(): void {
-    this.shoppingCartService.getAll().subscribe(data => {
-      this.listGoods = data;
-      console.log(this.listGoods);
-    });
-    this.shoppingCartService.getAllGoodsCart('tienhai').subscribe(next => {
-      this.listGoodsCart = next;
-      if (this.listGoodsCart == null) {
-        this.listGoodsCart = [];
-      }
-    });
+    if (this.tokenStorageService.getUser() != null) {
+      this.shoppingCartService.getAll().subscribe(data => {
+        this.listGoods = data;
+        console.log(this.listGoods);
+      });
+      this.shoppingCartService.getAllGoodsCart(this.tokenStorageService.getUser().username).subscribe(next => {
+        this.listGoodsCart = next;
+        if (this.listGoodsCart == null) {
+          this.listGoodsCart = [];
+        }
+      });
+    }
   }
 
   formatCash(str): void {
@@ -55,66 +59,69 @@ export class ListGoodsComponent implements OnInit {
   }
 
   addToCart(element: Goods): void {
-    if (this.checkDuplicate(this.listGoodsCart, element)) {
-      this.shakingEffect();
-      // chuyển để lưu giỏ hàng
-      this.goodsCart = new GoodsCart();
-      this.goodsCart.idGoods = element.idGoods;
-      this.goodsCart.goodsName = element.goodsName;
-      this.goodsCart.price = element.price;
-      this.goodsCart.tradeMark = element.tradeMark;
-      this.goodsCart.saleOff = element.saleOff;
-      this.goodsCart.priceForSaleOff = element.priceForSaleOff;
-      this.goodsCart.image = element.image;
-      this.goodsCart.quantityCart = 1;
-      this.goodsCart.idGoodsCart = null;
-      this.listGoodsCart.push(this.goodsCart);
-      this.shoppingCartService.findByCart('tienhai').subscribe(data => {
-        this.goodsCart.cart = data;
-      }, () => {
-      }, () => {
-        console.log(this.goodsCart);
-        this.shoppingCartService.addToCart(this.goodsCart).subscribe(data => {
-          console.log('oke');
+    if (this.tokenStorageService.getUser() != null) {
+      if (this.checkDuplicate(this.listGoodsCart, element)) {
+        this.shakingEffect();
+        // chuyển để lưu giỏ hàng
+        this.goodsCart = new GoodsCart();
+        this.goodsCart.idGoods = element.idGoods;
+        this.goodsCart.goodsName = element.goodsName;
+        this.goodsCart.price = element.price;
+        this.goodsCart.tradeMark = element.tradeMark;
+        this.goodsCart.saleOff = element.saleOff;
+        this.goodsCart.priceForSaleOff = element.priceForSaleOff;
+        this.goodsCart.image = element.image;
+        this.goodsCart.quantityCart = 1;
+        this.goodsCart.idGoodsCart = null;
+        this.listGoodsCart.push(this.goodsCart);
+        this.shoppingCartService.findByCart(this.tokenStorageService.getUser().username).subscribe(data => {
+          this.goodsCart.cart = data;
+        }, () => {
+        }, () => {
+          console.log(this.goodsCart);
+          this.shoppingCartService.addToCart(this.goodsCart).subscribe(data => {
+            console.log('oke');
+          });
         });
-      });
 
-    } else {
-      console.log('trái');
-      this.goodsCart = new GoodsCart();
-      this.shakingEffect();
-      this.shoppingCartService.findBy(element.idGoods).subscribe(data => {
-        this.goodsCart = data;
-      }, () => {
-      }, () => {
-        this.goodsCart.quantityCart++;
-        console.log(this.goodsCart);
-        this.shoppingCartService.updateCart(this.goodsCart, String(this.goodsCart.idGoodsCart)).subscribe(data => {
-          console.log('oke');
+      } else {
+        console.log('trái');
+        this.goodsCart = new GoodsCart();
+        this.shakingEffect();
+        this.shoppingCartService.findBy(element.idGoods).subscribe(data => {
+          this.goodsCart = data;
+        }, () => {
+        }, () => {
+          this.goodsCart.quantityCart++;
+          console.log(this.goodsCart);
+          this.shoppingCartService.updateCart(this.goodsCart, String(this.goodsCart.idGoodsCart)).subscribe(data => {
+            console.log('oke');
+          });
         });
-      });
+      }
     }
   }
 
   resetCart(): void {
-    this.shoppingCartService.getAllGoodsCart('tienhai').subscribe(next => {
-      this.listGoodsCart = next;
-      if (this.listGoodsCart == null) {
-        this.listGoodsCart = [];
-      }
-    }, () => {
-    }, () => {
-      let coutn = this.listGoodsCart.length;
-      for (const a of this.listGoodsCart) {
-        coutn--;
-        this.shoppingCartService.resetCart(a.idGoodsCart).subscribe(data => {
-        });
-      }
-      if (coutn == 0) {
-        this.reloadPage();
-      }
-    });
-
+    if (this.tokenStorageService.getUser() != null) {
+      this.shoppingCartService.getAllGoodsCart(this.tokenStorageService.getUser().username).subscribe(next => {
+        this.listGoodsCart = next;
+        if (this.listGoodsCart == null) {
+          this.listGoodsCart = [];
+        }
+      }, () => {
+      }, () => {
+        let coutn = this.listGoodsCart.length;
+        for (const a of this.listGoodsCart) {
+          coutn--;
+          this.shoppingCartService.resetCart(a.idGoodsCart).subscribe(data => {
+          });
+        }
+        if (coutn == 0) {
+          this.reloadPage();
+        }
+      });
+    }
   }
 
   reloadPage(): void {
