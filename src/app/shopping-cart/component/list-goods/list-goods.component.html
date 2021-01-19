@@ -8,9 +8,7 @@
 </div>
 
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" style="background-image: url('../../../../assets/img/breadcrumb.jpg'); height: 150px">
-  <div class="container">
-    <div class="row">
+<section class="breadcrumb-section set-bg" style="background-image: url('../../../../assets/img/breadcrumb.jpg'); height: 100px">
       <div class="col-lg-12 text-center">
         <div class="breadcrumb__text">
           <h2>NTH Shop</h2>
@@ -20,14 +18,12 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
 </section>
 
 <!-- Breadcrumb Section End -->
 <!-- Product Section Begin -->
+<div class="container">
 <section class="product spad">
-  <div class="container">
     <div class="row">
       <div class="col-lg-12 col-md-12">
         <div class="filter__item">
@@ -78,8 +74,9 @@
                 </ul>
               </div>
               <div class="product__item__text">
-                <h6><a [routerLink]="['/goods-detail']">{{element.goodsName}}</a></h6>
-                <h5>{{this.formatCash(element.price) + ' VNĐ'}}</h5>
+                <h6><a [routerLink]="['/goods-detail/'+ element.idGoods]">{{element.goodsName}}</a></h6>
+                <h5><del>{{this.formatCash(element.price) + ' VNĐ'}}</del></h5>
+                <h5 class="text-danger">{{formatCash((element.price) - ((element.price)*element.saleOff/100)+ '')+ ' VNĐ'}}</h5>
               </div>
             </div>
           </div>
@@ -95,8 +92,8 @@
         Đặt lại giỏ
       </button>
     </div>
-  </div>
 </section>
+</div>
 <!-- Product Section End -->
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

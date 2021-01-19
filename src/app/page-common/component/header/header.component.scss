@@ -3,10 +3,9 @@
 }
 
 @media (min-width: 576px){
-  .modal-dialog {
+  #abc-modal{
     max-width: 450px;
-
-  .modal-content {
+  #abc-modal-content {
     padding: 1rem;
   }
 }
@@ -38,4 +37,37 @@
 
 .signup-section {
   padding: 0.3rem 0rem;
+}
+
+.dropbtn {
+  color: black;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 140px;
+  z-index: 1;
+  border-radius: 5px;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 10px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }

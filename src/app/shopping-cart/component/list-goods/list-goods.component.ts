@@ -4,6 +4,8 @@ import {Goods} from '../../model/goods.class';
 import {MatDialog} from '@angular/material/dialog';
 import {GoodsCart} from '../../model/goods-cart';
 import {TokenStorageService} from '../../../page-common/service/token-storage/token-storage.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthenticationService} from '../../../page-common/service/auth/authentication.service';
 
 @Component({
   selector: 'app-list-goods',
@@ -14,19 +16,40 @@ export class ListGoodsComponent implements OnInit {
   public listGoods: Goods[] = [];
   public listGoodsCart: GoodsCart[] = [];
   public goodsCart: GoodsCart;
+  public inputSearch = '';
 
   constructor(private shoppingCartService: ShoppingCartService,
               public dialog: MatDialog,
-              private tokenStorageService: TokenStorageService) {
+              private tokenStorageService: TokenStorageService,
+              private router: Router,
+              private authenticationService: AuthenticationService) {
   }
 
   ngOnInit(): void {
-    if (this.tokenStorageService.getUser() != null) {
+    this.inputSearch = this.authenticationService.inputSearch;
+    if (this.inputSearch.length == 0) {
       this.shoppingCartService.getAll().subscribe(data => {
         this.listGoods = data;
         console.log(this.listGoods);
+        console.log('this.listGoods');
       });
+    }else {
+      this.shoppingCartService.getByInputSearch(this.inputSearch).subscribe(data => {
+        this.listGoods = data;
+        console.log(this.listGoods);
+      });
+    }
+    if (this.tokenStorageService.getUser() != null) {
+      console.log('oke r');
       this.shoppingCartService.getAllGoodsCart(this.tokenStorageService.getUser().username).subscribe(next => {
+        this.listGoodsCart = next;
+        if (this.listGoodsCart == null) {
+          this.listGoodsCart = [];
+        }
+      });
+    } else {
+      //  vãng lai
+      this.shoppingCartService.getCartSession().subscribe(next => {
         this.listGoodsCart = next;
         if (this.listGoodsCart == null) {
           this.listGoodsCart = [];
@@ -73,6 +96,8 @@ export class ListGoodsComponent implements OnInit {
         this.goodsCart.image = element.image;
         this.goodsCart.quantityCart = 1;
         this.goodsCart.idGoodsCart = null;
+        this.goodsCart.status = true;
+        this.goodsCart.totalQuantity = Number(element.quantity);
         this.listGoodsCart.push(this.goodsCart);
         this.shoppingCartService.findByCart(this.tokenStorageService.getUser().username).subscribe(data => {
           this.goodsCart.cart = data;
@@ -99,6 +124,25 @@ export class ListGoodsComponent implements OnInit {
           });
         });
       }
+    } else {
+      //  vãng lai
+      this.shakingEffect();
+      this.goodsCart = new GoodsCart();
+      this.goodsCart.idGoods = element.idGoods;
+      this.goodsCart.goodsName = element.goodsName;
+      this.goodsCart.price = element.price;
+      this.goodsCart.tradeMark = element.tradeMark;
+      this.goodsCart.saleOff = element.saleOff;
+      this.goodsCart.priceForSaleOff = element.priceForSaleOff;
+      this.goodsCart.image = element.image;
+      this.goodsCart.quantityCart = 1;
+      this.goodsCart.idGoodsCart = null;
+      this.goodsCart.status = true;
+      this.goodsCart.totalQuantity = Number(element.quantity);
+      this.listGoodsCart.push(this.goodsCart);
+      this.shoppingCartService.addCartSession(this.goodsCart).subscribe(data => {
+        console.log('oke');
+      });
     }
   }
 
@@ -120,6 +164,11 @@ export class ListGoodsComponent implements OnInit {
         if (coutn == 0) {
           this.reloadPage();
         }
+      });
+    }else {
+    //  Vãng lai
+      this.shoppingCartService.resetCartAnonymous().subscribe(data => {
+        this.ngOnInit();
       });
     }
   }

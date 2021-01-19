@@ -1,0 +1,159 @@
+<div class="row">
+  <div class="col-md-2" style="background-color: #e8eff0">
+    <ul class="nav flex-column" style="margin-top: 20px">
+      <li class="nav-item border-bottom mt-2" >
+        <a class="nav-link active" (click)="routerManager('manager-goods')"><i class="fas fa-tasks">&nbsp;&nbsp;Quản lí hàng hóa</i></a>
+      </li>
+      <li class="nav-item border-bottom mt-2">
+        <a class="nav-link " (click)="routerManager('manager-import')"><i class="fas fa-file-import">&nbsp;&nbsp;Lịch sử nhập hàng</i></a>
+      </li>
+      <li class="nav-item border-bottom mt-2">
+        <a class="nav-link" (click)="routerManager('manager-export')"><i class="fas fa-file-export">&nbsp;&nbsp;Lịch sử xuất hàng</i></a>
+      </li>
+      <li class="nav-item border-bottom mt-2">
+        <a class="nav-link " (click)="routerManager('manager-user')"><i class="fas fa-users">&nbsp;&nbsp;Quản lí người dùng</i></a>
+      </li>
+      <li class="nav-item border-bottom mt-2">
+        <a class="nav-link " (click)="routerManager('manager-statistic')"><i class="fab fa-accusoft">&nbsp;&nbsp;Thống kê</i></a>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-10">
+    <div class="page-wrapper">
+      <div class="page-breadcrumb">
+        <div class="row align-items-center">
+          <div class="col-5">
+            <h3 class="font-weight-bold"><i class="fas fa-th-list"></i>&nbsp;Lịch sử xuất hàng</h3>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <div class="table-responsive">
+                  <div class="d-flex">
+                    <p class="font-weight-bold mt-2">Số đơn hàng đã xuất là:
+                      là: {{listBill.length}}</p>
+                  </div>
+                  <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Ngày đặt hàng</th>
+                      <th>Trạng thái</th>
+                      <th>Chi tiết</th>
+                      <th>Tác vụ</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let element of listBill; let i = index">
+                      <td>{{i+1}}</td>
+                      <td style="font-size: 24px;color: black;cursor: pointer;">{{element.createdDate}}</td>
+                      <td style="font-size: 24px;color: black;cursor: pointer;" *ngIf="element.status == true; else block">Đẵ giao hàng</td>
+                      <ng-template #block>
+                        <td style="font-size: 24px;color: red;cursor: pointer;">Đang giao hàng</td>
+                      </ng-template>
+                      <td><button class="site-btn" (click)="getBillDetail(element.idBill)" data-toggle="modal" data-target="#myModal123">Xem</button></td>
+                      <td style="font-size: 24px;color: #b2b2b2;cursor: pointer;"><span class="icon_close"></span></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- The Modal -->
+<div class="modal fade" id="myModal123">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title font-weight-bold offset-4">Chi tiết hóa đơn</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="modal-body">
+          <div
+            style="width: 600px; margin-left: 70px; border: 1px solid black; background: rgba(255,103,184,0.16); border-radius: 6px">
+            <table>
+              <tr>
+                <td><img src="https://mir-s3-cdn-cf.behance.net/user/276/bf07e672490475.58f1ed07ae921.jpg"
+                         style="width: 60px; height: 60px;border-radius: 100%; margin-left: 5px">
+                </td>
+                <td>
+                  <h1 style="margin-left: 100px; color: #7fad39">Hóa đơn mua hàng</h1>
+                </td>
+              </tr>
+
+            </table>
+            <strong style="margin-left: 10px ">Thực phẩm sạch:</strong><strong style="; color: #7fad39"> OGANI</strong> <strong
+            style="margin-left: 158px">Giao hàng ngày: 14/01/2021</strong><br>
+            <strong style="margin-left: 10px">Email: thucphamsach.ogani.gmail.com </strong> <strong style="margin-left: 70px">Người
+            giao: Nguyễn Tiến Hải</strong><br>
+            <strong style="margin-left: 10px"> Sđt: 090.899.899</strong> <strong style="margin-left: 223px">Dự kiến giao ngày:
+            16/01/2021</strong><br>
+            <br>
+            <strong style="margin-left: 200px; font-size: 20px">Các sản phẩm của bạn</strong>
+            <table style="border-radius: 5px; border: 1px solid black; margin-left: 10px">
+              <thead>
+              <tr style=";border: 1px solid black">
+                <td style="width: 110px;text-align: center;border: 1px solid black">#</td>
+                <td style="width: 110px;text-align: center;border: 1px solid black">Các sản phẩm</td>
+                <td style="width: 110px;text-align: center;border: 1px solid black">Giá</td>
+                <td style="width: 110px;text-align: center;border: 1px solid black">Số lượng</td>
+                <td style="width: 110px;text-align: center;border: 1px solid black">Tổng</td>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let element of goodsBill; let i= index">
+                <td style="width: 110px;text-align: center;border: 1px solid black">{{i+1}}</td>
+                <td style="width: 110px;text-align: center;border: 1px solid black">{{element.goodsName}}</td>
+                <td style="width: 110px;text-align: center;border: 1px solid black">{{formatCash((element.price - element.price*element.saleOff/100)+'')}}</td>
+                <td style="width: 110px;text-align: center;border: 1px solid black">{{element.quantityCart}}</td>
+                <td style="width: 110px;text-align: center;border: 1px solid black">{{formatCash((element.price*element.quantityCart - element.price*element.saleOff*element.quantityCart /100)+ '')}}</td>
+              </tr>
+              </tbody>
+            </table>
+            <br>
+            <table>
+              <tr>
+                <td>
+                  <strong style="margin-left: 10px">Phí giao hàng: 15.000 VNĐ</strong>
+                  <br>
+                  <strong style="margin-left: 10px">Tổng chi phí hóa đơn: {{formatCash(totalMoney + '')}}</strong>
+                </td>
+                <td>
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMfH36G-5u3qfC1VW4_w6zqvjK1Ajcc07zHg&usqp=CAU"
+                       style="width: 60px; height: 60px; margin-left: 100px">
+                </td>
+                <td>
+                  <strong style="margin-left: 10px">Chủ tịch ký tên</strong>
+                  <br>
+                  <i style="margin-left: 37px"> hải </i><br>
+                  <small style="margin-left: 10px">Nguyễn Tiến Hải</small>
+                </td>
+              </tr>
+
+            </table>
+            <small style="margin-left: 10px"><strong>Địa chỉ giao hàng:</strong>a</small>
+            <hr>
+            <a style="margin-left: 10px" href="http://localhost:4200/home">Mua hàng tại đây!</a>
+            <p style="margin-left: 10px">Cảm ơn bạn đã mua hàng tại website chúng tôi! Chúc quý khánh vui vẻ.</p>
+          </div>
+          <br>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

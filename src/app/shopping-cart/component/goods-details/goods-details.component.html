@@ -1,7 +1,14 @@
+
+<div class="fixed-header btn-icon-text animatebutton"  id="animatebutton">
+  <a [routerLink]="['/bill-goods']"><img src="../../../../assets/img/image-cart.png" height="100" width="150" /></a>
+  <span class="badge badge-danger" *ngIf="listGoodsCart; else block">{{listGoodsCart.length}} +</span>
+  <ng-template #block>
+    <span class="badge badge-danger">0 +</span>
+  </ng-template>
+</div>
+
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" style="background-image: url('../../../../assets/img/breadcrumb.jpg')">
-  <div class="container">
-    <div class="row">
+<section class="breadcrumb-section set-bg" style="background-image: url('../../../../assets/img/breadcrumb.jpg'); height: 100px">
       <div class="col-lg-12 text-center">
         <div class="breadcrumb__text">
           <h2>Chi tiết sản phẩm</h2>
@@ -12,8 +19,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
 </section>
 <!-- Breadcrumb Section End -->
 
@@ -25,41 +30,49 @@
         <div class="product__details__pic">
           <div class="product__details__pic__item">
             <img class="product__details__pic__item--large"
-                 src="../../../../assets/img/product/details/product-details-1.jpg" alt="">
+                 src="{{goodsCard.image}}" style="width: 200px;height: 450px" alt="">
           </div>
         </div>
       </div>
       <div class="col-lg-6 col-md-6">
         <div class="product__details__text">
-          <h3>Sản phẩm rau tươi</h3>
+          <h3>Sản phẩm {{goodsCard.goodsName}}</h3>
           <div class="product__details__rating">
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star"></i>
             <i class="fa fa-star-half-o"></i>
-            <span>(18 Lượt xem)</span>
+            <span>(<i class="fas fa-heart" style="color: red"></i>&nbsp;{{countLover}} Lượt thích)</span>
           </div>
-          <div class="product__details__price">50.000 VNĐ</div>
-          <p>Chuối ngồi nhà phát triển lớn nhất, tincidunt cần một cái gối. Sản xuất và đường kính cà rốt xe, cà rốt yếu tố, nhưng giá trị nó. Nhưng hãng hàng không đã tốt nghiệp nibh. Sản xuất và đường kính cà rốt xe, cà rốt yếu tố, nhưng giá trị nó. Mid cần tiếng cười vĩ mô.</p>
+          <div class="product__details__price">{{ formatCash(goodsCard.price) +' VNĐ'}}</div>
+          <p>{{goodsCard.description}}</p>
           <div class="product__details__quantity">
             <div class="quantity">
               <div class="pro-qty">
-                <input type="text" value="1">
+                <input type="text" [value]="quantityCart" #myValue (keyup)="getQuantity(myValue.value)">
               </div>
             </div>
           </div>
-          <a href="#" class="primary-btn">Thêm vào giỏ</a>
-          <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+          <a class="primary-btn" (click)="addToCart(goodsCard,myValue.value)">Thêm vào giỏ</a>
+          <a  class="heart-icon" *ngIf="checkLover == false; else blockLover" (click)="setLover(goodsCard.idGoods)"><span class="icon_heart_alt"></span></a>
+          <ng-template #blockLover>
+            <a  class="heart-icon" ><span class="icon_heart_alt font-weight-bold" style="color: red"></span></a>
+          </ng-template>
+
           <ul>
-            <li><b>Khả dụng</b> <span>Trong kho</span></li>
+            <li><b>Khả dụng còn</b> <span *ngIf="quantityCart < goodsCard.quantity; else blocka">{{goodsCard.quantity}} (số lượng)</span>
+            <ng-template #blocka>
+              <span style="color: red">{{goodsCard.quantity}} (số lượng)</span>
+            </ng-template>
+            </li>
             <li><b>Cân nặng</b> <span>0.5 kg</span></li>
             <li><b>Chia sẻ</b>
               <div class="share">
-                <a href="#"><i class="fa fa-facebook"></i></a>
-                <a href="#"><i class="fa fa-twitter"></i></a>
-                <a href="#"><i class="fa fa-instagram"></i></a>
-                <a href="#"><i class="fa fa-pinterest"></i></a>
+                <a ><i class="fab fa-facebook"></i></a>
+                <a ><i class="fab fa-twitter-square"></i></a>
+                <a ><i class="fab fa-instagram"></i></a>
+                <a ><i class="fab fa-pinterest-square"></i></a>
               </div>
             </li>
           </ul>

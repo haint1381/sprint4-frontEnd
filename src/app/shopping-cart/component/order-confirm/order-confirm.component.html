@@ -1,0 +1,19 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <div class="modal-title  d-flex offset-4 " id="exampleModalLabel">
+      <div class="spinner-border text-success" role="status">
+      </div>
+      <h6 class="font-weight-bold mt-2">Đặt sau {{time}}</h6>
+    </div>
+  </div>
+  <div class="modal-body">
+    <p class="text-dark"><i class="fas fa-map-marker-alt"></i>&nbsp;Địa chỉ: <strong
+      class="text-dark">&nbsp;&nbsp;{{user.address}}</strong><br></p>
+    <p class="text-dark"><i class="far fa-clock"></i>&nbsp;Thời gian: <strong
+      class="text-dark">&nbsp;&nbsp;{{mm + '/' + dd + '/' + yyyy}}</strong><br></p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="site-btn btn-secondary" matDialogClose="" (click)="ngOnInit()">Hủy</button>
+    <button type="button" class="site-btn" matDialogClose=""  (click)="payMoney()">Xác nhận</button>
+  </div>
+</div>

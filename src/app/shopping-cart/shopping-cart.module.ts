@@ -8,11 +8,12 @@ import {ListGoodsComponent} from './component/list-goods/list-goods.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import {NgxPaginationModule} from 'ngx-pagination';
 import {ShopRoute} from './shopping-cart.router';
-
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { OrderConfirmComponent } from './component/order-confirm/order-confirm.component';
 
 
 @NgModule({
-  declarations: [BillGoodsComponent, CheckOutComponent, GoodsDetailsComponent, ListGoodsComponent],
+  declarations: [BillGoodsComponent, CheckOutComponent, GoodsDetailsComponent, ListGoodsComponent, OrderConfirmComponent],
   exports: [
     ListGoodsComponent
   ],
@@ -20,7 +21,9 @@ import {ShopRoute} from './shopping-cart.router';
     CommonModule,
     RouterModule.forChild(ShopRoute),
     MatDialogModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class ShoppingCartModule { }

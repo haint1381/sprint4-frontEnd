@@ -1,18 +1,15 @@
 
+
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" style="background-image: url('../../../../assets/img/breadcrumb.jpg')">
-  <div class="container">
-    <div class="row">
+<section class="breadcrumb-section set-bg" style="background-image: url('../../../../assets/img/breadcrumb.jpg'); height: 100px">
       <div class="col-lg-12 text-center">
         <div class="breadcrumb__text">
           <h2>Giỏ hàng của bạn</h2>
           <div class="breadcrumb__option">
-            <a href="./index.html">Trang chủ</a>
+            <a href="./#">Trang chủ</a>
             <span>Giỏ hàng</span>
           </div>
         </div>
-      </div>
-    </div>
   </div>
 </section>
 <!-- Breadcrumb Section End -->
@@ -26,6 +23,7 @@
             <thead>
             <tr>
               <th class="shoping__product">Các sản phẩm</th>
+              <th>Khả dụng</th>
               <th>Giá</th>
               <th>Số lượng</th>
               <th>Tổng</th>
@@ -38,6 +36,10 @@
                 <img src="{{element.image}}" alt="" style="width: 50px; height: 50px">
                 <h5>{{element.goodsName}}<label class="font-weight-bold text-dark">&nbsp;&nbsp;&nbsp;{{ '-'+element.saleOff + ' %'}}</label></h5>
               </td>
+              <td class="shoping__cart__price" *ngIf="element.checkQuantity != false;else bock">{{element.totalQuantity}}</td>
+              <ng-template #bock>
+                <td class="shoping__cart__price text-danger">{{element.totalQuantity}} &nbsp;&nbsp;(Không đủ)</td>
+              </ng-template>
               <td class="shoping__cart__price">
                 {{formatCash(element.price)+ ' VNĐ'}}
               </td>

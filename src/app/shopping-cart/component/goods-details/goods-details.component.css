@@ -1,0 +1,23 @@
+.fixed-header{
+  width: 10%;
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+}
+.fixed-header span{
+  position: fixed;
+  right: 0px;
+}
+
+
+.btn {
+  margin-right: 0.5rem !important
+}
+
+.btn {
+  font-size: 0.875rem;
+  line-height: 1;
+  font-weight: 400;
+  padding: .7rem 1.5rem;
+  border-radius: 0.1275rem
+}

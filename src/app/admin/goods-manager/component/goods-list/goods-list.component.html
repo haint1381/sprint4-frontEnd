@@ -1,0 +1,258 @@
+<div class="row">
+  <div class="col-md-2" style="background-color: #e8eff0">
+    <ul class="nav flex-column" style="margin-top: 20px">
+      <li class="nav-item border-bottom mt-2" >
+        <a class="nav-link active" (click)="routerManager('manager-goods')"><i class="fas fa-tasks">&nbsp;&nbsp;Quản lí hàng hóa</i></a>
+      </li>
+      <li class="nav-item border-bottom mt-2">
+        <a class="nav-link " (click)="routerManager('manager-import')"><i class="fas fa-file-import">&nbsp;&nbsp;Lịch sử nhập hàng</i></a>
+      </li>
+      <li class="nav-item border-bottom mt-2">
+        <a class="nav-link" (click)="routerManager('manager-export')"><i class="fas fa-file-export">&nbsp;&nbsp;Lịch sử xuất hàng</i></a>
+      </li>
+      <li class="nav-item border-bottom mt-2">
+        <a class="nav-link " (click)="routerManager('manager-user')"><i class="fas fa-users">&nbsp;&nbsp;Quản lí người dùng</i></a>
+      </li>
+      <li class="nav-item border-bottom mt-2">
+        <a class="nav-link " (click)="routerManager('manager-statistic')"><i class="fab fa-accusoft">&nbsp;&nbsp;Thống kê</i></a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="page-wrapper col-md-10">
+    <div class="page-breadcrumb">
+      <div class="row align-items-center">
+        <div class="col-5">
+          <h3 class="font-weight-bold"><i class="fas fa-th-list"></i>&nbsp;Danh sách thực phẩm</h3>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <div class="table-responsive">
+                <div class="d-flex">
+                  <p class="font-weight-bold mt-2" *ngIf="listGoods != null; else block">Tổng các sản phẩm
+                    là: {{listGoods.length}}</p>
+                  <ng-template #block>
+                    <small class="font-weight-bold">Tổng các sản phẩm là: 0</small>
+                  </ng-template>
+                  <button class="btn btn-success offset-8" style="height: 40px" (click)="selectOption()"
+                          data-toggle="modal" data-target="#myModal1"><i class="fab fa-product-hunt">Nhập hàng</i></button>
+                </div>
+                <table class="table table-bordered">
+                  <thead>
+                  <tr>
+                    <th class="text-center">STT</th>
+                    <th class="text-center">Mã phẩm</th>
+                    <th> Sản phẩm</th>
+                    <th class="text-center">Khả dụng</th>
+                    <th class="text-center">Giá</th>
+                    <th class="text-center">Giảm giá</th>
+                    <th class="text-center">Loại sản phẩm</th>
+                    <th class="text-center">Tác vụ</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let element of listGoods|paginate: { itemsPerPage: 8, currentPage: p }; let i =index">
+                    <th class="text-center">{{i + 1}}</th>
+                    <td class="text-center">{{element.idGoods | IdConvert: 'SP'}}</td>
+                    <td>{{element.goodsName}}</td>
+                    <td class="text-center">{{element.quantity}}</td>
+                    <td class="text-center">{{element.price}}</td>
+                    <td class="text-center">{{element.saleOff}}</td>
+                    <td class="">{{element.category}}</td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-sm btn-warning mr-3 "
+                              (click)="displayModal(element.idGoods, element.category)"
+                              data-toggle="modal" data-target="#myModal123456">
+                        <i class="fas fa-tools"></i>
+                      </button>
+                      <button type="button" class="btn btn-sm btn-danger mr-3 "
+                              (click)="getName(element.goodsName, element.idGoods)" data-toggle="modal"
+                              data-target="#exampleModal123">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                <pagination-controls class=" d-flex justify-content-center " (pageChange)="p = $event" previousLabel="Trước"
+                                     nextLabel="Sau" responsive="true"></pagination-controls>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal123" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel123"
+     aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel123">Xác nhận xóa sản phẩm</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn chắc chắn xóa sản phẩm <span class="text-danger">{{goodsName}}</span> không ?<br>
+          Lưu ý! Bạn không thể hoàn tác lại.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="deleteGoods()">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="myModal1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="font-weight-bold offset-4">Thêm mới sản phẩm</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-10 row">
+              <div class="col-3">
+                <p class="font-weight-bold ">Tên sản phẩm: </p>
+                <p class="font-weight-bold mt-4">Nhãn hiệu: </p>
+                <p class="font-weight-bold mt-4">Giá: </p>
+                <p class="font-weight-bold mt-4">Giảm giá (%): </p>
+                <p class="font-weight-bold mt-4">Số lượng: </p>
+                <p class="font-weight-bold mt-4">Loại sản phẩm: </p>
+                <p class="font-weight-bold mt-4">Mô tả: </p>
+              </div>
+              <div class="col-9">
+                <form [formGroup]="formCreate">
+                  <input formControlName="goodsName" class="form-control">
+                  <input formControlName="tradeMark" class="form-control mt-2">
+                  <input formControlName="price" class="form-control mt-2">
+                  <input formControlName="saleOff" class="form-control mt-2">
+                  <input formControlName="quantity" class="form-control mt-2">
+                  <select class="form-control mt-2" formControlName="category">
+                    <option [selected]="true" [value]="null">---Chọn loại sản phẩm--</option>
+                    <option *ngFor="let element of categoryList " [value]="element.idCategory">{{element.categoryName}}</option>
+                  </select>
+                  <input formControlName="description" class="form-control mt-3">
+                </form>
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="row">
+                <p class="font-weight-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ảnh</p>
+                <div class="text-center">
+                  <img [src]="url"
+                       alt="Xin vui lòng chọn ảnh!!!" style="color: darkred; font-size: 20px;
+       width: 290px; height: 240px" class="img-thumbnail" (click)="fileUploader.click()">
+                  <div class="col-6 mt-3">
+                    <input type="file" accept="image/*" class="form-control form-control-sm"
+                           id="images1" #fileUploader (change)="showPreview($event)" style="display: none;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="createGoods()">Thêm mới</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- The Modal -->
+<div class="modal fade" id="myModal123456">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="font-weight-bold offset-4">Chỉnh sửa sản phẩm</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-10 row">
+              <div class="col-3">
+                <p class="font-weight-bold ">Tên sản phẩm: </p>
+                <p class="font-weight-bold mt-4">Nhãn hiệu: </p>
+                <p class="font-weight-bold mt-4">Giá: </p>
+                <p class="font-weight-bold mt-4">Giảm giá (%): </p>
+                <p class="font-weight-bold mt-4">Số lượng: </p>
+                <p class="font-weight-bold mt-4">Loại sản phẩm: </p>
+                <p class="font-weight-bold mt-4">Mô tả: </p>
+              </div>
+              <div class="col-9">
+                <form [formGroup]="formCreate">
+                  <input formControlName="goodsName" class="form-control">
+                  <input formControlName="tradeMark" class="form-control mt-2">
+                  <input formControlName="price" class="form-control mt-2">
+                  <input formControlName="saleOff" class="form-control mt-2">
+                  <input formControlName="quantity" class="form-control mt-2">
+                  <select class="form-control mt-2" formControlName="category">
+                    <option *ngFor="let element of categoryList " [value]="element.idCategory" >{{element.categoryName}}</option>
+                  </select>
+                  <input formControlName="description" class="form-control mt-3">
+                </form>
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="row">
+                <p class="font-weight-bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ảnh</p>
+                <div class="text-center">
+                  <img [src]="url"
+                       alt="Xin vui lòng chọn ảnh!!!" style="color: darkred; font-size: 20px;
+       width: 290px; height: 240px" class="img-thumbnail" (click)="fileUploader.click()">
+                  <div class="col-6 mt-3">
+                    <input type="file" accept="image/*" class="form-control form-control-sm"
+                           id="images" #fileUploader (change)="showPreview($event)" style="display: none;">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+          <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="setGoods()">Thêm mới</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

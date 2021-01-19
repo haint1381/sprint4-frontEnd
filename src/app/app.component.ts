@@ -1,11 +1,16 @@
-import { Component, HostListener, ElementRef } from '@angular/core';
+import {Component, HostListener, ElementRef, OnInit} from '@angular/core';
+import {TokenStorageService} from './page-common/service/token-storage/token-storage.service';
+import {MatDialog} from '@angular/material/dialog';
+import {FormBuilder} from '@angular/forms';
+import {AuthenticationService} from './page-common/service/auth/authentication.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent  {
+export class AppComponent{
   title = 'front-end';
   isShow: boolean;
   topPosToStartShowing = 100;

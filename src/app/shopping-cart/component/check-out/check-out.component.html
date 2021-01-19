@@ -1,21 +1,17 @@
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" style="background-image: url('../../../../assets/img/breadcrumb.jpg')">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <div class="breadcrumb__text">
-          <h2>Thủ tục thanh toán</h2>
-          <div class="breadcrumb__option">
-            <a href="#">Trang Chủ</a>
-            <span>Thủ tục thanh toán</span>
-          </div>
-        </div>
+<section class="breadcrumb-section set-bg"
+         style="background-image: url('../../../../assets/img/breadcrumb.jpg'); height: 100px">
+  <div class="col-lg-12 text-center">
+    <div class="breadcrumb__text">
+      <h2>Thủ tục thanh toán</h2>
+      <div class="breadcrumb__option">
+        <a href="#">Trang Chủ</a>
+        <span>Thủ tục thanh toán</span>
       </div>
     </div>
   </div>
 </section>
 <!-- Breadcrumb Section End -->
-
 <!-- Checkout Section Begin -->
 <section class="checkout spad">
   <div class="container">
@@ -26,48 +22,86 @@
       </div>
     </div>
     <div class="checkout__form">
-      <h4>Chi tiết thanh toán</h4>
+      <h2 class="mb-2">Chi tiết thanh toán</h2>
       <form action="#">
         <div class="row">
           <div class="col-lg-8 col-md-6">
             <h4 class="checkout__order">Thông tin giao hàng.</h4>
-            <div class="row">
-              <div class="col-lg-6">
-                <p>Họ Tên:<span class="font-weight-bold"> Nguyễn Tiến Hải</span></p>
-              </div>
-              <div class="col-lg-6">
-                <p>Số Điện Thoại:<span class="font-weight-bold"> 090.998.998</span></p>
-              </div>
-            </div>
-
-            <div class="checkout__input__checkbox row">
-              <p class="col-md-11">Địa chỉ:<span class="font-weight-bold"> [k58/64A] - Ông Ích Khiêm - Thanh Bình - Hải Châu - Đà Nẵng.</span>
-              </p>
-              <label class="col-md-1">
-                <input type="radio" [checked]="true">
-                <span class="checkmark"></span>
-              </label>
-            </div>
-
-            <h4 class="checkout__order">Gửi đến một địa chỉ khác?</h4>
-            <div class="row">
-              <div class="col-lg-6">
-                <div class="checkout__input">
-                  <p>Họ Tên<span>*</span></p>
-                  <input type="text">
+            <ng-container *ngIf="user.idUser != undefined;else block">
+              <div class="row">
+                <div class="col-lg-6">
+                  <p>Họ Tên:<span class="font-weight-bold">{{user.fullName}}</span></p>
+                </div>
+                <div class="col-lg-6">
+                  <p>Số Điện Thoại:<span class="font-weight-bold">{{user.phoneNumber}}</span></p>
                 </div>
               </div>
-              <div class="col-lg-6">
-                <div class="checkout__input">
-                  <p>Số Điện Thoại<span>*</span></p>
-                  <input type="text">
+              <div class="checkout__input__checkbox row">
+                <p class="col-md-11">Địa chỉ:<span class="font-weight-bold">{{user.address}}</span>
+                </p>
+                <label class="col-md-1">
+                  <input type="radio" [checked]="true">
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+              <h4 class="checkout__order">Gửi đến một địa chỉ khác?</h4>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="checkout__input">
+                    <p>Họ Tên<span>*</span></p>
+                    <input type="text">
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="checkout__input">
+                    <p>Số Điện Thoại<span>*</span></p>
+                    <input type="text">
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="checkout__input">
-              <p>Địa chỉ<span>*</span></p>
-              <input type="text">
-            </div>
+              <div class="checkout__input">
+                <p>Địa chỉ<span>*</span></p>
+                <input type="text">
+              </div>
+            </ng-container>
+            <ng-template #block>
+              <form [formGroup]="formUser">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="checkout__input">
+                      <p>Họ Tên<span>*</span></p>
+                      <input type="text" formControlName="fullName">
+                      <span class="text-danger"
+                            *ngIf="formUser.get('fullName').errors?.required && formUser.get('fullName').touched">
+                      Vui lòng điền tên người nhận hàng.</span>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="checkout__input">
+                      <p>Số Điện Thoại<span>*</span></p>
+                      <input type="text" formControlName="phoneNumber">
+                      <span class="text-danger"
+                            *ngIf="formUser.get('phoneNumber').errors?.required && formUser.get('phoneNumber').touched">
+                      Vui lòng điền số điện thoại người nhận hàng.</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="checkout__input">
+                  <p>Email<span>*</span></p>
+                  <input type="text" formControlName="email">
+                  <span class="text-danger"
+                        *ngIf="formUser.get('email').errors?.required && formUser.get('email').touched">
+                      Vui lòng điền địa chỉ email.</span>
+                </div>
+                <div class="checkout__input">
+                  <p>Địa chỉ<span>*</span></p>
+                  <input type="text" formControlName="address">
+                  <span class="text-danger"
+                        *ngIf="formUser.get('address').errors?.required && formUser.get('address').touched">
+                      Vui lòng điền địa chỉ nhận hàng.</span>
+                </div>
+              </form>
+            </ng-template>
           </div>
           <div class="col-lg-4 col-md-6">
             <div class="checkout__order">
@@ -92,7 +126,14 @@
                   <span class="checkmark"></span>
                 </label>
               </div>
-              <button type="button" class="site-btn" (click)="startTimer()" data-toggle="modal" data-target="#exampleModal">ĐẶT HÀNG</button>
+              <button type="button" class="site-btn" id="paymentPayPal" (click)="startTimer()">ĐẶT HÀNG</button>
+              <div class="p-0 m-0 justify-content-end col-md-6 " #paypalRef></div>
+              <div *ngIf="checkSendMail==false">
+                <div class="spinner-border text-danger" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+                <span class="text-danger">Đang kiểm tra đơn hàng của bạn.</span>
+              </div>
             </div>
           </div>
         </div>
@@ -100,27 +141,4 @@
     </div>
   </div>
 </section>
-<!-- Checkout Section End -->
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title  d-flex offset-4 " id="exampleModalLabel">
-          <div class="spinner-border text-success" role="status">
-          </div>
-          <h6 class="font-weight-bold mt-2">Đặt sau 5</h6>
-        </div>
-      </div>
-      <div class="modal-body">
-        <p class="text-dark"><i class="fas fa-map-marker-alt"></i>&nbsp;Địa chỉ: <strong class="text-dark">&nbsp;&nbsp;{{user.address}}</strong><br></p>
-        <p class="text-dark"><i class="far fa-clock"></i>&nbsp;Thời gian: <strong class="text-dark">&nbsp;&nbsp;{{mm + '/' + dd + '/' + yyyy}}</strong><br></p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="site-btn btn-secondary" data-dismiss="modal" (click)="ngOnInit()">Hủy</button>
-        <button type="button" class="site-btn" data-dismiss="modal">Xác nhận</button>
-      </div>
-    </div>
-  </div>
-</div>
+

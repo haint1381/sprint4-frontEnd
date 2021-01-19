@@ -8,5 +8,5 @@ export const ShopRoute: Routes = [
   {path: 'list-goods', component: ListGoodsComponent},
   {path: 'bill-goods', component: BillGoodsComponent},
   {path: 'check-out', component: CheckOutComponent},
-  {path: 'goods-detail', component: GoodsDetailsComponent}
+  {path: 'goods-detail/:id', component: GoodsDetailsComponent}
 ];

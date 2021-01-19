@@ -23,6 +23,14 @@ export class BillGoodsComponent implements OnInit {
       this.shoppingCartService.getAllGoodsCart(this.tokenStorageService.getUser().username).subscribe(next => {
         this.listGoodsCart = next;
       });
+    }else {
+      // vãng lai
+      this.shoppingCartService.getCartSession().subscribe(next => {
+        this.listGoodsCart = next;
+        if (this.listGoodsCart == null) {
+          this.listGoodsCart = [];
+        }
+      });
     }
   }
 
@@ -36,15 +44,20 @@ export class BillGoodsComponent implements OnInit {
   setQuantityCart(value: string, idGoodsCart: number): void {
     for (const element of this.listGoodsCart) {
       if (idGoodsCart == element.idGoodsCart) {
-        element.quantityCart = Number(value);
-        this.shoppingCartService.findBy(element.idGoods).subscribe(data => {
-          this.goodsCart = data;
-        }, () => {
-        }, () => {
-          this.goodsCart.quantityCart = Number(value);
-          this.shoppingCartService.updateCart(this.goodsCart, String(this.goodsCart.idGoodsCart)).subscribe(data => {
+        if (element.totalQuantity >= Number(value)) {
+          element.checkQuantity = true;
+          element.quantityCart = Number(value);
+          this.shoppingCartService.findBy(element.idGoods).subscribe(data => {
+            this.goodsCart = data;
+          }, () => {
+          }, () => {
+            this.goodsCart.quantityCart = Number(value);
+            this.shoppingCartService.updateCart(this.goodsCart, String(this.goodsCart.idGoodsCart)).subscribe(data => {
+            });
           });
-        });
+        } else {
+          element.checkQuantity = false;
+        }
       }
     }
   }
@@ -56,6 +69,7 @@ export class BillGoodsComponent implements OnInit {
   }
 
   checkout(): void {
+    this.totalMoney = 0;
     for (const element of this.listGoodsCart) {
       this.totalMoney += (element.quantityCart * element.price) - ((element.quantityCart * element.price) * element.saleOff / 100);
     }

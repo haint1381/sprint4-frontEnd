@@ -7,4 +7,5 @@ export class User {
   address: string;
   image: string;
   email: string;
+  role: string;
 }
