@@ -92,9 +92,9 @@ export class GoodsListComponent implements OnInit {
   }
 
   setGoods(): void {
-    this.formCreate.markAllAsTouched();
-    if (this.formCreate.valid) {
-      const name = this.tokenStorageService.getUser().username;
+   // this.formCreate.markAllAsTouched();
+   // if (this.formCreate.valid) {
+      const name = this.makeid();
       const fileRef = this.storage.ref(name);
       this.storage.upload(name, this.selectedImage).snapshotChanges().pipe(
         finalize(() => {
@@ -110,7 +110,17 @@ export class GoodsListComponent implements OnInit {
           });
         })
       ).subscribe();
-    }
+   // }
+  }
+
+  makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < 5; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
   }
 
   showPreview(event: any): void {
@@ -128,7 +138,7 @@ export class GoodsListComponent implements OnInit {
   createGoods(): void {
     // this.formCreate.markAllAsTouched();
     // if (this.formCreate.valid) {
-    const name = this.tokenStorageService.getUser().username;
+    const name = this.makeid();
     const fileRef = this.storage.ref(name);
     this.storage.upload(name, this.selectedImage).snapshotChanges().pipe(
       finalize(() => {
